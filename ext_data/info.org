@@ -1,0 +1,12 @@
+* Heading
+
+--------------------------------------------------------------------------------
+This directory will contain methods and routines that may not directly relate
+to players or the teams.  Some such tidbits include weather details for game
+day, NFL Schedule, etc.
+--------------------------------------------------------------------------------
+
+* Todo
+** TODO Add ability to download weather info from day of game
+** TODO Add ability to pull down NFL Schedule
+** TODO C-c C-x M

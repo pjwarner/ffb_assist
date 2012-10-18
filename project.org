@@ -1,0 +1,3 @@
+* Task List
+** TODO Add ability to parse player info from NFL.com
+** TODO 

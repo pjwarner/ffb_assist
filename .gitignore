@@ -1,0 +1,8 @@
+*.pyc
+*.pyo
+*.#*
+[#]*[#]
+*.*[~]
+raw_data
+ffb_venv
+build
