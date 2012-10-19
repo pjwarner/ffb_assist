@@ -5,10 +5,17 @@ import conn as data
 from lxml import etree
 
 class Players():
-    def dl_stats_nfl(self, year, week):
+    def dl_stats_nfl(self, year, week, league='592090'):
+        '''
+        args (str(year), str(week)
+
+        Parse Weekly Player Stats from NFL.com
+        Parses the first 25 pages (500 players) of stats. Stats are a weekly
+        piece of information.
+        '''
         urls = []
         for offset in range(1, 477, 25):
-            url = 'http://fantasy.nfl.com/league/592090/players?'
+            url = 'http://fantasy.nfl.com/league/' + league + '/players?'
             offset = 'offset=%s&' % offset
             playerStatus = 'playerStatus=all&'
             position = 'position=O&'
@@ -117,6 +124,12 @@ class Players():
         return players
     
     def upd_stats(self, players, year, week):
+        '''
+        args (dict(players), str(year), str(week))
+        
+        Takes dict of player info formatted the way parse_stats_nfl() output is
+        And inserts that data into the database for use later.
+        '''
         for x in players:
             team =  players[x]['TEAM']
             pos = players[x]['POS']
@@ -151,7 +164,8 @@ class Players():
 
 if __name__ == '__main__':
     year = '2012'
-    week = '6'
+    weeks = ['1', '2', '3', '4', '5', '6']
 
     p = Players()
-    p.dl_stats_nfl(year, week)
+    for week in weeks:
+        p.dl_stats_nfl(year, week)
