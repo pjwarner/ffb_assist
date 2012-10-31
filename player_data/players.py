@@ -3,11 +3,12 @@ import os
 import requests
 import conn as data
 from lxml import etree
+from decimal import Decimal
 
 class Players():
     def dl_stats_nfl(self, year, week, league='592090'):
         '''
-        args (str(year), str(week)
+        args (int(year), int(week)
 
         Parse Weekly Player Stats from NFL.com
         Parses the first 25 pages (500 players) of stats. Stats are a weekly
@@ -108,16 +109,16 @@ class Players():
                 'NAME': name,
                 'POS': pos,
                 'TEAM': team,
-                'YEAR':year,
-                'WEEK':week,
-                'GAME': 'GAME'+ '_' + year + '_' + week,
+                'YEAR':int(year),
+                'WEEK':int(week),
+                'GAME': 'GAME'+ '_' + str(year) + '_' + str(week),
                 'STATS':{
                     'OPP': opp,
-                    'PASS_STATS':{'YDS':pass_yds, 'TD':pass_td, 'INT':pass_int, 'SACKED':pass_sacked},
-                    'RUN_STATS':{'YDS':rush_yds, 'TD':rush_td},
-                    'REC_STATS':{'YDS':rec_yds, 'TD':rec_td},
-                    'MISC_STATS':{'RET_TD':ret_td, 'FUM_LOST': fum_lost, 'FUM_TD':misc_fumTD, '2PT':misc_2PT},
-                    'FAN_POINTS': fan_points
+                    'PASS_STATS':{'YDS':int(pass_yds), 'TD':int(pass_td), 'INT':int(pass_int), 'SACKED':int(pass_sacked)},
+                    'RUN_STATS':{'YDS':int(rush_yds), 'TD':int(rush_td)},
+                    'REC_STATS':{'YDS':int(rec_yds), 'TD':int(rec_td)},
+                    'MISC_STATS':{'RET_TD':int(ret_td), 'FUM_LOST': int(fum_lost), 'FUM_TD':int(misc_fumTD), '2PT':int(misc_2PT)},
+                    'FAN_POINTS': float(fan_points)
                     }
                 }
 
@@ -137,7 +138,7 @@ class Players():
             game = players[x]['GAME']
             _id = team + '_' + pos + '_' + name.replace(' ','_')
 
-            game_info = data.db.players.find_one({'ffb_id':_id, 'GAME':game}, {'_id':0, 'ffb_id':1, 'GAME':1, 'STATS':1})
+            game_info = data.db.players.find_one({'ffb_id':_id, 'GAME':game}, {'_id':1, 'ffb_id':1, 'GAME':1, 'STATS':1})
             
             if not game_info: #if player does not exist add player and game
                 print('record not found creating player and game')
@@ -147,17 +148,27 @@ class Players():
                         'POS':pos,
                         'TEAM':team,
                         'GAME':game,
+                        'YEAR': int(year),
+                        'WEEK': int(week),
                         'STATS': players[x]['STATS']
                         })
             elif game_info['GAME'] == game: #Player and game exist update game info (stat adjustments)
                 print('record exists, updating game')
                 data.db.players.update({
-                        '_id':_id,
+                        'ffb_id':_id,
                         'NAME':name,
                         'POS':pos,
                         'TEAM':team,
                         'GAME':game,
-                        }, {'$set': {'STATS':players[x]['STATS']}})
+                        }, {'$set': {
+                            'ffb_id':_id,
+                            'NAME':name,
+                            'POS':pos,
+                            'TEAM':team,
+                            'GAME':game,
+                            'YEAR': int(year),
+                            'WEEK': int(week),
+                            'STATS':players[x]['STATS']}})
                 
     def del_stats(self):
         raise NotImplementedError()
