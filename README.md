@@ -12,6 +12,7 @@ Current Functionality
 * Calculate player position avg against opp def
 
 Road Map (No specific order)
+==
 * Calculate fan points based on custom scoring
 * Pull team data from [yahoo, fleaflicker, espn, etc]
 * More robust UI (maybe make it web based)
