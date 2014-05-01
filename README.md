@@ -1,3 +1,4 @@
+[![Stories in Ready](https://badge.waffle.io/pjwarner/ffb_assist.png?label=ready&title=Ready)](https://waffle.io/pjwarner/ffb_assist)
 ffb_assist
 ==========
 
